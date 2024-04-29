@@ -1,21 +1,28 @@
-with
-    customerdata as (
-        select distinct
-            u.id as user_id,
-            sum(case when u.gender = 'F' then 1 else null end) as female,
-            sum(case when u.gender = 'M' then 1 else null end) as male,
-            u.country as country
-        from {{ ref("stgorderitems") }} as o
-        inner join {{ ref("stgUsers") }} u on o.user_id = u.id
-        where o.status not in ('Cancelled', 'Returned')
-        group by 1, 4
-    )
+WITH
+customer_gender_distribution AS (
+  SELECT 
+    DISTINCT oi.user_id,
+    SUM(CASE WHEN u.gender = 'M' THEN 1 ELSE null END) AS male,
+    SUM(CASE WHEN u.gender = 'F' THEN 1 ELSE null END) AS female,
+    u.country AS country
+  FROM `iconic-glass-418612`.`dbt_cmba`.`stgorderitems` AS oi
+  INNER JOIN `iconic-glass-418612`.`dbt_cmba`.`stgUsers` AS u  
+  ON oi.user_id = u.id
+  WHERE oi.status NOT IN ('Cancelled','Returned')
+  GROUP BY 1, 4 
+),
 
-select
-    country,
-    count(distinct user_id) as customers_count,
-    count(female) as female,
-    count(male) as male
-from customerdata
-group by country
-order by customers_count desc
+customer_summary AS (
+  SELECT
+    c.country,
+    COUNT(DISTINCT c.user_id) AS customers_count,
+    COUNT(c.female) AS female,
+    COUNT(c.male) AS male
+  FROM customer_gender_distribution AS c
+  GROUP BY 1
+)
+
+SELECT *
+FROM customer_summary
+ORDER BY customers_count DESC
+LIMIT 500

@@ -13,7 +13,7 @@ WITH yearly_orders AS (
 SELECT
    order_year,
    num_orders
-FROM 
+FROM  
     yearly_orders
 ORDER BY 
     order_year
