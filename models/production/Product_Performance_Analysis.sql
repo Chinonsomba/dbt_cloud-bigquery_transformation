@@ -1,8 +1,22 @@
-    SELECT
-      category,
-      brand,
-      distribution_center_id,
-      COUNT(id) AS total_products,
-      SUM(retail_price) AS total_revenue
-    FROM `iconic-glass-418612`.`dbt_cmba`.`stgproducts`
-    GROUP BY category, brand, distribution_center_id
+SELECT 
+    p.category,
+    p.brand,
+    COUNT(oi.id) AS total_products,
+    SUM(oi.sale_price * o.num_of_item) AS revenue,
+    SUM(o.num_of_item) AS quantity
+FROM 
+    {{ ref('stgorderitems') }} AS oi
+LEFT JOIN 
+    {{ ref('stgOrders') }} AS o 
+ON 
+    oi.order_id = o.order_id
+LEFT JOIN 
+    {{ ref('stgproducts') }} AS p
+ON 
+    oi.product_id = p.id
+WHERE 
+    oi.status NOT IN ('Cancelled', 'Returned')
+GROUP BY 
+    p.category, p.brand
+ORDER BY 
+    3 DESC
