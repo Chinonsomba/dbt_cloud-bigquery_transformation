@@ -1,20 +1,17 @@
-
-
-WITH yearly_orders AS (
-  SELECT
-    EXTRACT(YEAR FROM created_at) AS order_year,
-    COUNT(*) AS num_orders
-  FROM 
-    {{ ref('stgOrders') }}
-  GROUP BY 
-    order_year
-)
-
-SELECT
-   order_year,
-   num_orders
-FROM  
-    yearly_orders
+SELECT 
+  DATE_TRUNC(oi.created_at, YEAR) AS order_date,
+  SUM(oi.sale_price * o.num_of_item) AS revenue,
+  COUNT(DISTINCT oi.order_id) AS order_count,
+  COUNT(DISTINCT oi.user_id) AS customers_purchase
+FROM 
+  {{ ref('stgorderitems') }} AS oi
+LEFT JOIN 
+  {{ ref('stgOrders') }} AS o 
+ON 
+  oi.order_id = o.order_id
+WHERE 
+  oi.status NOT IN ('Cancelled', 'Returned')
+GROUP BY 
+  order_date
 ORDER BY 
-    order_year
-
+  order_date DESC
