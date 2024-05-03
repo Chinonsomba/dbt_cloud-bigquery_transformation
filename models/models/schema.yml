@@ -1,0 +1,58 @@
+models:
+  - name: Staging
+    tables:
+      - name: stgDistributionCentres
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: stgEvents
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: stgOrders
+        columns:
+          - name: order_id
+            tests:
+              - unique
+              - not_null
+      - name: stgUsers
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: stginventoryitems
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: stgorderitems
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: stgproducts
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
+  - name: Production
+    models:
+      - name: Age_distribution
+      - name: Order_fufilment
+      - name: Product_Performance_Analysis
+      - name: Yearly_sales_trend
+      - name: cost_analysis
+      - name: customer_country
+      - name: customers_gender
+      - name: monthly_sales
+      - name: return_rate
+      - name: traffic_source
