@@ -1,8 +1,8 @@
 SELECT 
   DATE_TRUNC(oi.created_at, YEAR) AS order_date,
   SUM(oi.sale_price * o.num_of_item) AS revenue,
-  COUNT(DISTINCT oi.order_id) AS order_count,
-  COUNT(DISTINCT oi.user_id) AS customers_purchase
+  COUNT(DISTINCT oi.order_id) AS total_order,
+  COUNT(DISTINCT oi.user_id) AS total_customers
 FROM 
   {{ ref('stgorderitems') }} AS oi
 LEFT JOIN 

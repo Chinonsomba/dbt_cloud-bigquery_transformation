@@ -7,7 +7,7 @@ models:
             tests:
               - unique
               - not_null
-      - name: stgEvents
+      - name: stgEvents 
         columns:
           - name: id
             tests:
@@ -47,12 +47,91 @@ models:
   - name: Production
     models:
       - name: Age_distribution
-      - name: Order_fufilment
+        columns:
+          - name: age_group
+          - description: primary key
+            tests:
+              - unique
+              - not_null
+      - name: Best_Customers
+        columns:
+          - name: user_id
+          - description: This column displays the id of the customers.
+          - unique_key: user_id
+        tests:
+            - unique
+            - not_null
       - name: Product_Performance_Analysis
+        columns:
+          - name: category
+          - description: primary key
+            tests:
+              - unique
+              - not_null
       - name: Yearly_sales_trend
+        columns:
+          - name: order_date
+          - description: This column displays the sales made per year.
+          - description: primary key
+            tests:
+              - unique
+              - not_null
       - name: cost_analysis
-      - name: customer_country
+        columns:
+          - name: product_category
+          - description: This column displays the category category to which the product belongs.
+          - name: product_brand
+          - description: The column displays the brand of the product.
+          -  unique_key: ["product_category", "product_brand"]
+        tests:
+            - unique
+            - not_null
+      - name: customer_gender_distribution
+        columns:
+          - name: country
+          - description: This column displays the country of the customers.
+          - description: primary key
+            tests:
+              - unique
+              - not_null
       - name: customers_gender
+        columns:
+          - name: gender
+          - description: This column displays the gender of the customers.
+        tests:
+            - unique
+            - not_null
       - name: monthly_sales
+        columns:
+          - name: order_date
+          - description: This column displays month of sales.
+          - unique key: order_date
+            tests:
+            - unique
+            - not_null
       - name: return_rate
+        columns:
+          - name: brand
+          - description: This column displays the brand to which the product belongs.
+          - name: category
+          - description: The column displays the category of the product.
+          -  unique_key: ["product_category", "product_brand"]
+        tests:
+            - unique
+            - not_null
       - name: traffic_source
+        columns:
+          - name: traffic_source
+          - description: This column displays the channel through which customers patronize.
+          - unique key: traffic_source
+            tests:
+            - unique
+            - not_null
+      - name: least_performing_customers
+        columns:
+          - name: user_id
+          - description: This column displays the id of the customers.
+          - unique_key: user_id
+        tests:
+            - unique
+            - not_null       
