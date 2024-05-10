@@ -3,7 +3,7 @@ SELECT
     p.brand,
     COUNT(oi.id) AS total_products,
     SUM(oi.sale_price * o.num_of_item) AS revenue,
-    SUM(o.num_of_item) AS quantity
+    SUM(o.num_of_item) AS quantity_ordered
 FROM 
     {{ ref('stgorderitems') }} AS oi
 LEFT JOIN 
