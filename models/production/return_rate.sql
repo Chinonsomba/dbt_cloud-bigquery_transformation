@@ -5,9 +5,9 @@ WITH OrderQuantities AS (
     COUNTIF(oi.status = 'Cancelled') AS Cancelled,
     COUNTIF(oi.status = 'Returned') AS Returned
   FROM 
-    {{ref("stgorderitems")}} AS oi
+    {{ ref("stgorderitems") }} AS oi
   INNER JOIN 
-    {{ref("stgproducts")}} AS p
+    {{ ref("stgproducts") }} AS p
   ON 
     oi.product_id = p.id
   GROUP BY 
@@ -19,7 +19,10 @@ SELECT
   category,
   Cancelled,
   Returned,
-  IFNULL((Returned / (Cancelled + Returned)) * 100, 0) AS ReturnRatePercentage
+  CASE
+    WHEN (Cancelled + Returned) = 0 THEN 0
+    ELSE (Returned / (Cancelled + Returned)) * 100
+  END AS ReturnRatePercentage
 FROM 
   OrderQuantities
 ORDER BY 
